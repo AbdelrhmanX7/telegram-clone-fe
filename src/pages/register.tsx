@@ -68,8 +68,8 @@ export default function Register() {
   } = useDropzone({ accept: { "image/*": [] }, maxFiles: 1, maxSize: 2097152 });
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="flex flex-col p-6 gap-6 w-[500px] mb-10 mt-32 rounded-lg border shadow-sm text-slate-700">
+    <div className="h-screen flex justify-center items-center">
+      <div className="flex flex-col p-6 gap-6 w-[500px] rounded-lg border shadow-sm text-slate-700">
         <h1 className="text-4xl font-semibold text-center mb-3 text-black">
           Register
         </h1>
