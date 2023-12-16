@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export const AnimateNumbers = ({ number = 1234 }) => {
-  const arrNumber = number.toString().split("");
+  const [arrNumber, setArrNumber] = useState<string[]>(["0"]);
+  useEffect(() => setArrNumber(number.toString().split("")), [number]);
   return (
     <div className="flex max-h-[24px] overflow-y-hidden">
-      {arrNumber.map((item: any, index) => (
+      {arrNumber?.map((item: any, index) => (
         <motion.div animate={{ y: item * -20 }} key={item + index}>
           <div className="flex flex-col justify-center items-center mt-0.5">
             <p>0</p>

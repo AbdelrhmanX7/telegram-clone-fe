@@ -39,27 +39,35 @@ export default function Login() {
             setFormState({ ...formState, password: e.target.value })
           }
         />
-        <Button
-          isLoading={false}
-          disabled={!email || !password}
-          type="primary"
-          // onClick={async () => {
-          //   try {
-          //     const res = await loginFn(formState);
-          //     setCookie("token", res?.token);
-          //     setUserData(res?.user);
-          //     toast.success("تم تسجيل الدخول بنجاح");
-          //     router.push("/");
-          //   } catch (error: any) {
-          //     toast.error(error?.response?.data);
-          //   }
-          // }}
-        >
-          Login
-        </Button>
-        <Link className="text-lg font-medium underline w-fit" href="/register">
-          Register
-        </Link>
+        <div className="flex gap-2 items-center">
+          <Button
+            isLoading={false}
+            disabled={!email || !password}
+            type="primary"
+            className="w-6/12"
+            // onClick={async () => {
+            //   try {
+            //     const res = await loginFn(formState);
+            //     setCookie("token", res?.token);
+            //     setUserData(res?.user);
+            //     toast.success("تم تسجيل الدخول بنجاح");
+            //     router.push("/");
+            //   } catch (error: any) {
+            //     toast.error(error?.response?.data);
+            //   }
+            // }}
+          >
+            Login
+          </Button>
+          <Link className="w-6/12" href="/register">
+            <Button
+              type="dashed"
+              className="text-xl font-semibold text-[#3da3f6] m-1 w-full"
+            >
+              Register
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );

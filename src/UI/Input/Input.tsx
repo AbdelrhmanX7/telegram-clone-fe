@@ -8,7 +8,7 @@ export const Input = forwardRef<InputRef, NormalInputProps>(function Input(
   ref
 ) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full">
       {label && <p className="text-2xl font-semibold">{label}</p>}
       <AntdInput
         ref={ref}
