@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
-import { Button, EmailInput, PasswordInput } from "@/UI";
+import { Button, EmailInput, PasswordInput, Image } from "@/UI";
 
 type LoginFormType = {
   email: string;
@@ -39,7 +39,6 @@ export default function Login() {
             setFormState({ ...formState, password: e.target.value })
           }
         />
-
         <Button
           isLoading={false}
           disabled={!email || !password}
