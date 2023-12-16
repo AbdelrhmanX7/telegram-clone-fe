@@ -18,9 +18,15 @@ export const ChatCard = ({
   name,
   profileImage = "",
   lastMessageDate = new Date(),
+  className,
 }: ChatCardProps) => {
   return (
-    <div className="flex justify-between items-center w-full min-h-[70px] hover:bg-[#f1f1f1] duration-300 cursor-pointer py-1.5 px-2">
+    <div
+      className={classNames(
+        "flex justify-between items-center w-full min-h-[70px] hover:bg-[#f1f1f1] duration-300 cursor-pointer py-1.5 px-2",
+        className
+      )}
+    >
       <div className="flex gap-2.5">
         <div className="w-fit h-fit relative">
           <Image

@@ -12,4 +12,5 @@ export type ChatCardProps = {
   name?: string;
   profileImage?: string;
   lastMessageDate?: Date;
+  className?: string;
 };
