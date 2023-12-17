@@ -1,7 +1,9 @@
-export function formatDate(inputDate: Date): string {
+export function formatDate(inputDate: Date | string): any {
   const currentDate: Date = new Date();
   const targetDate: Date = new Date(inputDate);
-
+  if (targetDate.toString() === "Invalid Date") {
+    return inputDate;
+  }
   const timeOptions: Intl.DateTimeFormatOptions = {
     hour: "numeric",
     minute: "numeric",

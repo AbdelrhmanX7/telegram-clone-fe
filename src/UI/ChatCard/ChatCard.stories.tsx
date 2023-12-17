@@ -15,19 +15,17 @@ export default {
     isPinned: true,
     lastMessage: "That is how you do it!",
     messageState: "empty",
-    name: "Abdelrhman",
+    username: "Abdelrhman",
     profileImage:
       "https://images.freeimages.com/images/large-previews/aed/three-bees-on-sunflower-1337029.jpg",
-    lastMessageDate: new Date(),
+    lastMessageDate: "Last seen recently",
     newMessagesCount: 10,
   },
 };
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template = (args: ChatCardProps) => (
-  <AnimateChangeInSize>
-    <ChatCard {...args} />
-  </AnimateChangeInSize>
+  <ChatCard className="!max-w-[320px]" {...args} />
 );
 
 export const ChatCardElement: any = Template.bind({});

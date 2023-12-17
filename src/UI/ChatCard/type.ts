@@ -9,9 +9,11 @@ export type ChatCardProps = {
   messageState?: MessageStateProps["messageState"];
   lastMessage?: string;
   newMessagesCount?: number;
-  name?: string;
+  username?: string;
   profileImage?: string;
   blurHashProfileImage?: string;
-  lastMessageDate?: Date;
+  lastMessageDate?: Date | string;
   className?: string;
+  isLoading?: boolean;
+  onClick?: () => void;
 };

@@ -4,6 +4,7 @@
     "plugin:storybook/recommended"
   ],
   "rules": {
-    "jsx-a11y/alt-text": "off"
+    "jsx-a11y/alt-text": "off",
+    "react-hooks/exhaustive-deps": "off"
   }
 }

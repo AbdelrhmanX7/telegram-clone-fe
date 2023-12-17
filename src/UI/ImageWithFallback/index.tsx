@@ -15,6 +15,8 @@ export const Image = ({
       {...props}
       style={{
         height: props.height,
+        minWidth: props.width,
+        maxWidth: props.width,
         ...props.style,
       }}
       alt={alt ?? ""}
