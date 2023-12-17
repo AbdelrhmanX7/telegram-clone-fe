@@ -12,7 +12,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonComponentProps>(
       <ButtomComp
         ref={ref}
         className={classNames(
-          "h-fit font-medium text-lg p-2",
+          "h-fit font-medium text-lg py-1 px-2",
           type === "primary" && "bg-[#1677ff]",
           className
         )}

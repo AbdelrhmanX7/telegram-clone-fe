@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { setCookie } from "cookies-next";
@@ -8,6 +8,7 @@ import { Button, EmailInput, Image, Input, PasswordInput } from "@/UI";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import { classNames } from "@/utils";
+import { useRegister } from "@/services/Hooks";
 const getColor = (props: any) => {
   if (props.isDragAccept) {
     return "#00e676";
@@ -44,16 +45,17 @@ export default function Register() {
   const [formState, setFormState] = useState({
     username: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     password: "",
+    profileImage: "",
   });
-
-  const { username, email, phone, password } = formState;
+  const router = useRouter();
+  const { username, email, phoneNumber, password } = formState;
 
   const [, setUserData] = useLocalStorage("user", {});
 
   function validation() {
-    if (!username || !email || !phone || !password) {
+    if (!username || !email || !phoneNumber || !password) {
       return false;
     }
     return true;
@@ -66,7 +68,16 @@ export default function Register() {
     isDragReject,
     acceptedFiles,
   } = useDropzone({ accept: { "image/*": [] }, maxFiles: 1, maxSize: 2097152 });
-
+  useEffect(() => {
+    if (acceptedFiles.length) {
+      setFormState({
+        ...formState,
+        profileImage: URL.createObjectURL(acceptedFiles[0]),
+      });
+    }
+  }, [acceptedFiles]);
+  const { mutateAsync: registerFn, isPending } = useRegister();
+  console.log(formState);
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="flex flex-col p-6 gap-6 w-[500px] rounded-lg border shadow-sm text-slate-700">
@@ -100,9 +111,9 @@ export default function Register() {
         />
         <Input
           label="Phone number"
-          value={phone}
+          value={phoneNumber}
           onChange={(e) =>
-            setFormState({ ...formState, phone: e.target.value })
+            setFormState({ ...formState, phoneNumber: e.target.value })
           }
         />
         <EmailInput
@@ -124,17 +135,17 @@ export default function Register() {
             loading={false}
             disabled={!validation()}
             className="w-6/12"
-            // onClick={async () => {
-            //   try {
-            //     const res = await signupFn(formState);
-            //     setCookie('token', res?.token);
-            //     setUserData(res?.user);
-            //     toast.success('تم تسجيل الدخول بنجاح');
-            //     router.push('/');
-            //   } catch (error: any) {
-            //     toast.error(JSON.stringify(error?.response?.data));
-            //   }
-            // }}
+            onClick={async () => {
+              try {
+                const res = await registerFn(formState);
+                setCookie("token", res?.token);
+                setUserData(res?.user);
+                toast.success("تم تسجيل الدخول بنجاح");
+                router.push("/chats");
+              } catch (error: any) {
+                toast.error(JSON.stringify(error?.response?.data?.message));
+              }
+            }}
           >
             Create a new account
           </Button>

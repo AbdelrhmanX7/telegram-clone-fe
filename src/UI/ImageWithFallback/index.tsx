@@ -1,22 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { default as NextImage } from "next/image";
-import { dynamicBlurDataUrl } from "../../utils";
 import { ImageWithFallbackProps } from "./type";
 
-export const Image = ({ alt = "", src, ...props }: ImageWithFallbackProps) => {
+export const Image = ({
+  alt = "",
+  src,
+  blurHash,
+  ...props
+}: ImageWithFallbackProps) => {
   const [imgSrc, setImgSrc] = useState(src);
-  const [blurHash, setBlurHash] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    const modifyImage = async () => {
-      setIsLoading(true);
-      const data = await dynamicBlurDataUrl(src);
-      setBlurHash(data);
-      setIsLoading(false);
-    };
 
-    modifyImage();
-  }, []);
   return (
     <NextImage
       {...props}
@@ -26,7 +19,7 @@ export const Image = ({ alt = "", src, ...props }: ImageWithFallbackProps) => {
       }}
       alt={alt ?? ""}
       src={imgSrc}
-      placeholder={!isLoading && blurHash.length ? "blur" : "empty"}
+      placeholder={!!blurHash?.length ? "blur" : "empty"}
       blurDataURL={blurHash}
       onError={() => {
         setImgSrc(

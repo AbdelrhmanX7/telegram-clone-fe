@@ -17,6 +17,7 @@ export const ChatCard = ({
   newMessagesCount = 0,
   name,
   profileImage = "",
+  blurHashProfileImage = "",
   lastMessageDate = new Date(),
   className,
 }: ChatCardProps) => {
@@ -34,6 +35,7 @@ export const ChatCard = ({
             height={48}
             className="rounded-full"
             src={profileImage}
+            blurHash={blurHashProfileImage}
           />
           <div
             className={classNames(

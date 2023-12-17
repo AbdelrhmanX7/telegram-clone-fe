@@ -3,11 +3,13 @@ import Link from "next/link";
 import { useLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
 import { Button, EmailInput, PasswordInput, Image } from "@/UI";
+import { useLogin } from "@/services/Hooks";
+import { setCookie } from "cookies-next";
+import toast from "react-hot-toast";
 
 type LoginFormType = {
   email: string;
   password: string;
-  isTeacher: boolean;
 };
 
 export default function Login() {
@@ -15,10 +17,10 @@ export default function Login() {
   const [formState, setFormState] = useState<LoginFormType>({
     email: "",
     password: "",
-    isTeacher: false,
   });
   const [, setUserData] = useLocalStorage("user", {});
   const { email, password } = formState;
+  const { mutateAsync: loginFn, isPending } = useLogin();
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-[400px] p-6 flex flex-col gap-7 mt-10 border rounded-lg shadow-md">
@@ -41,21 +43,22 @@ export default function Login() {
         />
         <div className="flex gap-2 items-center">
           <Button
-            isLoading={false}
+            isLoading={isPending}
             disabled={!email || !password}
             type="primary"
             className="w-6/12"
-            // onClick={async () => {
-            //   try {
-            //     const res = await loginFn(formState);
-            //     setCookie("token", res?.token);
-            //     setUserData(res?.user);
-            //     toast.success("تم تسجيل الدخول بنجاح");
-            //     router.push("/");
-            //   } catch (error: any) {
-            //     toast.error(error?.response?.data);
-            //   }
-            // }}
+            onClick={async () => {
+              try {
+                const res = await loginFn(formState);
+                if (!res?.token?.length) toast.error("Something went wrong");
+                setCookie("token", res?.token);
+                setUserData(res?.user);
+                toast.success("Logged in successfully");
+                router.push("/chats");
+              } catch (error: any) {
+                toast.error(error?.response?.data?.message ?? "");
+              }
+            }}
           >
             Login
           </Button>

@@ -11,6 +11,7 @@ export type ChatCardProps = {
   newMessagesCount?: number;
   name?: string;
   profileImage?: string;
+  blurHashProfileImage?: string;
   lastMessageDate?: Date;
   className?: string;
 };
