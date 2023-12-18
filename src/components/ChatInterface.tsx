@@ -2,7 +2,7 @@ import { Button, Input } from "@/UI";
 import { classNames } from "@/utils";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -15,9 +15,12 @@ export const ChatInterface = ({
   lastActiveDate?: string;
   messages?: { isSentByYou: boolean; message: string }[];
 }) => {
-  const [_, setUser] = useLocalStorage<any>("user", {});
+  const [userData, setUserData] = useLocalStorage<any>("user", {});
+  const [user, setUser] = useState<any>({});
+  useEffect(() => setUser(userData), [userData]);
   const router = useRouter();
-  if (!username?.length) return <div className="w-full h-full bg-[#7d8991]" />;
+  if (!username?.length || !user?.username?.length)
+    return <div className="w-full h-full bg-[#7d8991]" />;
   return (
     <div className="w-full h-full flex flex-col relative justify-start items-center bg-[#7d8991]">
       <div className="sticky w-full flex justify-between items-center gap-[18px] top-0 max-h-[54px] min-h-[54px] py-3 px-4 border-b bg-white">
@@ -28,7 +31,7 @@ export const ChatInterface = ({
         <div>
           <Button
             onClick={() => {
-              setUser({});
+              setUserData({});
               setCookie("token", "");
               router.push("/login");
             }}
@@ -40,11 +43,11 @@ export const ChatInterface = ({
       </div>
       <div className="h-full w-full overflow-auto py-2.5 px-2">
         {!!messages.length &&
-          messages?.map((item, index) => (
+          messages?.map((item: any, index) => (
             <div
               className={classNames(
                 "bg-white my-2 p-4 w-fit font-medium shadow-md border text-lg max-w-[350px] rounded-lg",
-                item.isSentByYou ? "bg-[#effedd] ml-auto" : "bg-white"
+                item?.userId === user?._id ? "bg-[#effedd] ml-auto" : "bg-white"
               )}
               key={`${item.message}-${index}`}
             >

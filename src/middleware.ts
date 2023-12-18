@@ -34,7 +34,7 @@ export default async function middleware(
   try {
     await jwtVerify(accessToken, encodedText);
 
-    if (filtered.length) return redirected("/chats");
+    if (filtered.length) return redirected("/conversations");
   } catch (error) {
     if (!filtered.length) return redirected("/login");
   }

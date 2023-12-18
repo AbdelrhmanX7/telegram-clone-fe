@@ -54,7 +54,7 @@ export default function Login() {
                 setCookie("token", res?.token);
                 setUserData(res?.user);
                 toast.success("Logged in successfully");
-                router.push("/chats");
+                router.push("/conversations");
               } catch (error: any) {
                 toast.error(error?.response?.data?.message ?? "");
               }

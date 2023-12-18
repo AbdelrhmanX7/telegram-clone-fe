@@ -140,8 +140,8 @@ export default function Register() {
                 const res = await registerFn(formState);
                 setCookie("token", res?.token);
                 setUserData(res?.user);
-                toast.success("تم تسجيل الدخول بنجاح");
-                router.push("/chats");
+                toast.success("ٌRegistered successfully");
+                router.push("/conversations");
               } catch (error: any) {
                 toast.error(JSON.stringify(error?.response?.data?.message));
               }
