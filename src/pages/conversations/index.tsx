@@ -1,13 +1,13 @@
-import { ChatInterface } from '@/components';
 import ChatsLayout from '@/components/layouts/ChatsLayout';
+import { AnimatePresence } from 'framer-motion';
 import React from 'react';
 
 export function Page({ children }: { children: React.ReactNode }) {
-  return <div className='w-full h-full'>{children}</div>;
+  return <AnimatePresence mode='wait'>{children}</AnimatePresence>;
 }
 
 export default function Transactions() {
-  return <ChatInterface params={{ userIds: [''], page: '' }} />;
+  return <div className='w-full h-full bg-[#7d8991] md:block hidden'></div>;
 }
 
 Transactions.getLayout = function getLayout(page: any) {

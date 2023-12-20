@@ -15,7 +15,7 @@ export const Image = ({ alt = '', src, blurHash, ...props }: ImageWithFallbackPr
         ...props.style,
       }}
       alt={alt ?? ''}
-      src={imgSrc}
+      src={src.toString().length ? imgSrc : 'https://craftypixels.com/placeholder-image/400x400/e8e8e8/e8e8e8'}
       placeholder={blurHash?.length ? 'blur' : 'empty'}
       blurDataURL={blurHash}
       onError={() => {

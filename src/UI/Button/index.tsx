@@ -10,7 +10,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonComponentProps>(functi
   return (
     <ButtomComp
       ref={ref}
-      className={classNames('h-fit font-medium text-lg py-1 px-2', type === 'primary' && 'bg-[#1677ff]', className)}
+      className={classNames(
+        'h-fit font-medium text-lg py-1 px-2 flex justify-center items-center',
+        type === 'primary' && 'bg-[#1677ff]',
+        className,
+      )}
       loading={isLoading}
       type={type}
       {...props}

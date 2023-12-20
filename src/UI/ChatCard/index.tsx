@@ -29,7 +29,7 @@ export const ChatCard = ({
     <div
       onClick={onClick}
       className={classNames(
-        'flex justify-start items-center w-full min-h-[70px] hover:bg-[#f1f1f1] duration-300 cursor-pointer py-1.5 px-2',
+        'flex justify-start items-center w-full min-h-[70px] hover:bg-[#f1f1f1] duration-300 cursor-pointer py-1.5 px-2 overflow-hidden',
         className,
       )}
     >
@@ -58,7 +58,7 @@ export const ChatCard = ({
           </div>
         </div>
         <div className='flex justify-between gap-1'>
-          <div className='text-[#8D8E90] whitespace-nowrap gap-1.5 overflow-hidden text-ellipsis text-sm flex-1'>
+          <div className='text-[#8D8E90] whitespace-nowrap gap-1.5 overflow-hidden text-ellipsis text-sm w-fit'>
             {lastMessage?.length ? lastMessage : `${username} joined Telegram`}
           </div>
           <motion.div

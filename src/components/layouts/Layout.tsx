@@ -1,13 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import axios from 'axios';
-import { getCookie } from 'cookies-next';
 import { Toaster } from 'react-hot-toast';
 const queryClient = new QueryClient();
 
 export const Layout = ({ children }: any) => {
-  const token = getCookie('token');
-  axios.defaults.headers.common.Authorization = token;
-
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Socket, io } from 'socket.io-client';
 
-let socket: Socket; // Initialize with null
+let socket: Socket;
 export const useWebSocket = (id?: string): { socket: Socket; isReady: boolean } => {
   const [isReady, setIsReady] = useState(false);
   useEffect(() => {

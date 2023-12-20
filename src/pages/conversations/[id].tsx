@@ -21,11 +21,7 @@ export default function ChatId({ id }: any) {
     [id],
   );
 
-  return (
-    <div className='w-full h-full'>
-      <ChatInterface params={params} />
-    </div>
-  );
+  return <ChatInterface params={params} />;
 }
 
 ChatId.getLayout = function getLayout(page: any) {
