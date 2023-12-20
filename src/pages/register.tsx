@@ -77,7 +77,6 @@ export default function Register() {
     }
   }, [acceptedFiles]);
   const { mutateAsync: registerFn, isPending } = useRegister();
-  console.log(formState);
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="flex flex-col p-6 gap-6 w-[500px] rounded-lg border shadow-sm text-slate-700">
@@ -132,7 +131,7 @@ export default function Register() {
         />
         <div className="flex gap-2 items-center w-full">
           <Button
-            loading={false}
+            loading={isPending}
             disabled={!validation()}
             className="w-6/12"
             onClick={async () => {

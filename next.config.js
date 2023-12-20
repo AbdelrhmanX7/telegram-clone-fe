@@ -4,6 +4,15 @@ const nextConfig = {
   env: {
     API: process.env.API,
   },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/login",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

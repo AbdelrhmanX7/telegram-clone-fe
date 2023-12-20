@@ -1,9 +1,7 @@
-import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 import { Toaster } from "react-hot-toast";
-import { useEffect } from "react";
 const queryClient = new QueryClient();
 
 export const Layout = ({ children }: any) => {

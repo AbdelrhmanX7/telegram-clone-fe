@@ -1,6 +1,5 @@
 import React from "react";
 import FriendsList from "./FriendsList";
-import Layout from "./Layout";
 
 const ChatsLayout = ({ children }: any) => {
   return (

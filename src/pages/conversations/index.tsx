@@ -1,6 +1,5 @@
 import { ChatInterface } from "@/components";
 import ChatsLayout from "@/components/ChatsLayout";
-import Layout from "@/components/Layout";
 import React from "react";
 
 export function Page({ children }: { children: React.ReactNode }) {

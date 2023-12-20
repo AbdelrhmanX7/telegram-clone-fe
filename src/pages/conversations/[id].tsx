@@ -3,7 +3,6 @@ import React, { useMemo } from "react";
 import { Page } from ".";
 import { ChatInterface } from "@/components";
 import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (req) => {
   return {

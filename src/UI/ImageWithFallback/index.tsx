@@ -21,7 +21,7 @@ export const Image = ({
       }}
       alt={alt ?? ""}
       src={imgSrc}
-      placeholder={!!blurHash?.length ? "blur" : "empty"}
+      placeholder={blurHash?.length ? "blur" : "empty"}
       blurDataURL={blurHash}
       onError={() => {
         setImgSrc(

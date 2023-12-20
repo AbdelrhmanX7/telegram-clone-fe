@@ -1,10 +1,6 @@
 import { ChatCard, Input } from "@/UI";
-import {
-  useGetAllConversations,
-  useGetConversation,
-  useUserSearch,
-} from "@/services/Hooks";
-import React, { useEffect, useMemo, useState } from "react";
+import { useGetAllConversations, useUserSearch } from "@/services/Hooks";
+import React, { useEffect, useMemo } from "react";
 import { useSearch } from "@/hooks";
 import Link from "next/link";
 
@@ -16,10 +12,6 @@ export const FriendsList = () => {
     setIsSearching,
     setSearchTerm,
   } = useSearch();
-  const [saveSearchUserData, setSaveSearchUserData] = useState<any>({
-    username: "",
-    lastActiveDate: "last seen recently",
-  });
 
   const userSearchParams = useMemo(
     () => ({ search: debouncedSearchTerm }),
@@ -33,7 +25,6 @@ export const FriendsList = () => {
   } = useUserSearch(userSearchParams);
 
   const { data: dataConversations } = useGetAllConversations();
-  console.log(dataConversations);
 
   useEffect(() => {
     refetch();

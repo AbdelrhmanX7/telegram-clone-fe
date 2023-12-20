@@ -1,10 +1,10 @@
 import React from "react";
 
 import { ChatCard } from ".";
-import { AnimateChangeInSize } from "../Animations";
 import { ChatCardProps } from "./type";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   title: "UI/ChatCard",
   component: ChatCard,

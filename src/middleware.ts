@@ -1,14 +1,10 @@
-import { NextRequest, NextResponse, NextMiddleware } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 const PUBLIC_FILE = /\.(.*)$/;
 
 const UNPROTECTED_PATHS = ["/login", "/register"];
 
-export default async function middleware(
-  req: NextRequest,
-  res: NextResponse,
-  next: NextMiddleware
-) {
+export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   if (
     pathname.startsWith("/_next") || // exclude Next.js internals
