@@ -33,6 +33,7 @@ export const FriendsList = () => {
   } = useUserSearch(userSearchParams);
 
   const { data: dataConversations } = useGetAllConversations();
+  console.log(dataConversations);
 
   useEffect(() => {
     refetch();
@@ -41,8 +42,6 @@ export const FriendsList = () => {
   useEffect(() => {
     if (!isFetching && isSearching) setIsSearching(false);
   }, [isFetching, isSearching]);
-
-  console.log(dataConversations);
 
   return (
     <div className="min-w-[390px] h-full border-r bg-white relative">
@@ -61,15 +60,19 @@ export const FriendsList = () => {
               Search result
             </div>
             {searchData?.users?.map((item: any) => (
-              <ChatCard
-                onClick={() => {
-                  setSaveSearchUserData({ username: item.username });
+              <Link
+                href={{
+                  pathname: "/conversations/[id]",
+                  query: { id: item._id },
                 }}
-                username={item.username}
-                profileImage={item.profileImage.url}
-                blurHashProfileImage={item.profileImage.blurHash}
                 key={item.name}
-              />
+              >
+                <ChatCard
+                  username={item.username}
+                  profileImage={item.profileImage.url}
+                  blurHashProfileImage={item.profileImage.blurHash}
+                />
+              </Link>
             ))}
             <div className="h-6 bg-[#f1f1f1] w-full px-2 font-medium text-[#8D8E90]">
               Conversations

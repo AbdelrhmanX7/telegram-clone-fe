@@ -4,12 +4,10 @@ import Layout from "./Layout";
 
 const ChatsLayout = ({ children }: any) => {
   return (
-    <Layout>
-      <div className="w-screen h-screen flex justify-center items-center">
-        <FriendsList />
-        {children}
-      </div>
-    </Layout>
+    <div className="w-screen h-screen flex justify-center items-center">
+      <FriendsList />
+      {children}
+    </div>
   );
 };
 

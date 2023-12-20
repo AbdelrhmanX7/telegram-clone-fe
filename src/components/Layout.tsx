@@ -3,9 +3,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 import { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
+const queryClient = new QueryClient();
 
 export const Layout = ({ children }: any) => {
-  const queryClient = new QueryClient();
   const token = getCookie("token");
   axios.defaults.headers.common.Authorization = token;
 

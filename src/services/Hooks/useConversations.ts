@@ -10,10 +10,11 @@ export const useGetAllConversations = () => {
 
 export const useGetConversation = (params: {
   page: string;
-  conversationId: string;
+  userIds: [string];
 }) => {
   return useQuery({
     queryKey: ["getConversation"],
     queryFn: () => getConversation(params),
+    enabled: !!params?.userIds?.length,
   });
 };

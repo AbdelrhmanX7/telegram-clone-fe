@@ -1,8 +1,6 @@
-import { Button } from "@/UI";
-import { ChatInterface, FriendsList } from "@/components";
+import { ChatInterface } from "@/components";
 import ChatsLayout from "@/components/ChatsLayout";
 import Layout from "@/components/Layout";
-import Link from "next/link";
 import React from "react";
 
 export function Page({ children }: { children: React.ReactNode }) {
@@ -10,7 +8,7 @@ export function Page({ children }: { children: React.ReactNode }) {
 }
 
 export default function Transactions() {
-  return <ChatInterface />;
+  return <ChatInterface params={{ userIds: [""], page: "" }} />;
 }
 
 Transactions.getLayout = function getLayout(page: any) {

@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 import { Toaster } from "react-hot-toast";
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useEffect } from "react";
 import { NextPage } from "next";
 import Layout from "@/components/Layout";
 
@@ -17,29 +17,10 @@ type AppPropsWithLayout = AppProps & {
 };
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout =
-    Component.getLayout ||
-    ((page) => <Layout initialData={pageProps?.initialData}>{page}</Layout>);
-
+  const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
   const queryClient = new QueryClient();
   const token = getCookie("token");
   axios.defaults.headers.common.Authorization = token;
 
-  return getLayout(
-    <QueryClientProvider client={queryClient}>
-      <Toaster
-        toastOptions={{
-          style: {
-            borderRadius: "10px",
-            background: "black",
-            color: "#fff",
-            fontSize: "18px",
-            fontWeight: "semibold",
-          },
-        }}
-        position="bottom-right"
-      />
-      <Component {...pageProps} />
-    </QueryClientProvider>
-  );
+  return <Layout>{getLayout(<Component {...pageProps} />)}</Layout>;
 }

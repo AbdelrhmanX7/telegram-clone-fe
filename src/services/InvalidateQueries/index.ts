@@ -11,5 +11,9 @@ export const GetInvalidateQueries = () => {
       queryClient.invalidateQueries({
         queryKey: ["getAllConversations"],
       }),
+    invalidateGetConversation: () =>
+      queryClient.invalidateQueries({
+        queryKey: ["getConversation"],
+      }),
   };
 };
