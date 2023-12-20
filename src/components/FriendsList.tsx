@@ -1,28 +1,15 @@
-import { ChatCard, Input } from "@/UI";
-import { useGetAllConversations, useUserSearch } from "@/services/Hooks";
-import React, { useEffect, useMemo } from "react";
-import { useSearch } from "@/hooks";
-import Link from "next/link";
+import { ChatCard, Input } from '@/UI';
+import { useGetAllConversations, useUserSearch } from '@/services/Hooks';
+import React, { useEffect, useMemo } from 'react';
+import { useSearch } from '@/hooks';
+import Link from 'next/link';
 
 export const FriendsList = () => {
-  const {
-    searchTerm,
-    debouncedSearchTerm,
-    isSearching,
-    setIsSearching,
-    setSearchTerm,
-  } = useSearch();
+  const { searchTerm, debouncedSearchTerm, isSearching, setIsSearching, setSearchTerm } = useSearch();
 
-  const userSearchParams = useMemo(
-    () => ({ search: debouncedSearchTerm }),
-    [debouncedSearchTerm]
-  );
+  const userSearchParams = useMemo(() => ({ search: debouncedSearchTerm }), [debouncedSearchTerm]);
 
-  const {
-    data: searchData,
-    isFetching,
-    refetch,
-  } = useUserSearch(userSearchParams);
+  const { data: searchData, isFetching, refetch } = useUserSearch(userSearchParams);
 
   const { data: dataConversations } = useGetAllConversations();
 
@@ -35,25 +22,23 @@ export const FriendsList = () => {
   }, [isFetching, isSearching]);
 
   return (
-    <div className="min-w-[390px] h-full border-r bg-white relative">
-      <div className="sticky flex justify-start items-center gap-[18px] top-0 max-h-[54px] py-2.5 px-3">
+    <div className='min-w-[390px] h-full border-r bg-white relative'>
+      <div className='sticky flex justify-start items-center gap-[18px] top-0 max-h-[54px] py-2.5 px-3'>
         <Input
-          placeholder="search"
-          className="h-[35px] !text-base rounded-full font-normal"
+          placeholder='search'
+          className='h-[35px] !text-base rounded-full font-normal'
           onChange={({ target }) => setSearchTerm(target.value)}
           value={searchTerm}
         />
       </div>
-      <div className="w-full h-fit">
+      <div className='w-full h-fit'>
         {!!searchData?.users?.length && (
           <>
-            <div className="h-6 bg-[#f1f1f1] w-full px-2 font-medium text-[#8D8E90]">
-              Search result
-            </div>
+            <div className='h-6 bg-[#f1f1f1] w-full px-2 font-medium text-[#8D8E90]'>Search result</div>
             {searchData?.users?.map((item: any) => (
               <Link
                 href={{
-                  pathname: "/conversations/[id]",
+                  pathname: '/conversations/[id]',
                   query: { id: item._id },
                 }}
                 key={item.name}
@@ -65,9 +50,7 @@ export const FriendsList = () => {
                 />
               </Link>
             ))}
-            <div className="h-6 bg-[#f1f1f1] w-full px-2 font-medium text-[#8D8E90]">
-              Conversations
-            </div>
+            <div className='h-6 bg-[#f1f1f1] w-full px-2 font-medium text-[#8D8E90]'>Conversations</div>
           </>
         )}
 

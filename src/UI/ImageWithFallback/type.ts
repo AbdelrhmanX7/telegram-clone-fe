@@ -1,6 +1,6 @@
-import { ImageProps } from "next/image";
+import { ImageProps } from 'next/image';
 
-export interface ImageWithFallbackProps extends Omit<ImageProps, "alt"> {
+export interface ImageWithFallbackProps extends Omit<ImageProps, 'alt'> {
   alt?: string;
   blurHash?: string;
 }

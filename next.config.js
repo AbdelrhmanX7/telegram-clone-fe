@@ -7,8 +7,8 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: "/",
-        destination: "/login",
+        source: '/',
+        destination: '/login',
         permanent: true,
       },
     ];
@@ -16,12 +16,12 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "**",
-        pathname: "**",
+        protocol: 'https',
+        hostname: '**',
+        pathname: '**',
       },
     ],
-    domains: ["craftypixels"],
+    domains: ['craftypixels'],
   },
 };
 

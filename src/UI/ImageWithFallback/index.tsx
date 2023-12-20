@@ -1,13 +1,8 @@
-import React, { useState } from "react";
-import { default as NextImage } from "next/image";
-import { ImageWithFallbackProps } from "./type";
+import React, { useState } from 'react';
+import { default as NextImage } from 'next/image';
+import { ImageWithFallbackProps } from './type';
 
-export const Image = ({
-  alt = "",
-  src,
-  blurHash,
-  ...props
-}: ImageWithFallbackProps) => {
+export const Image = ({ alt = '', src, blurHash, ...props }: ImageWithFallbackProps) => {
   const [imgSrc, setImgSrc] = useState(src);
 
   return (
@@ -19,14 +14,12 @@ export const Image = ({
         maxWidth: props.width,
         ...props.style,
       }}
-      alt={alt ?? ""}
+      alt={alt ?? ''}
       src={imgSrc}
-      placeholder={blurHash?.length ? "blur" : "empty"}
+      placeholder={blurHash?.length ? 'blur' : 'empty'}
       blurDataURL={blurHash}
       onError={() => {
-        setImgSrc(
-          "https://craftypixels.com/placeholder-image/400x400/e8e8e8/e8e8e8"
-        );
+        setImgSrc('https://craftypixels.com/placeholder-image/400x400/e8e8e8/e8e8e8');
       }}
     />
   );

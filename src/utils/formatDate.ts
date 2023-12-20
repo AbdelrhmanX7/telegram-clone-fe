@@ -1,12 +1,12 @@
 export function formatDate(inputDate: Date | string): any {
   const currentDate: Date = new Date();
   const targetDate: Date = new Date(inputDate);
-  if (targetDate.toString() === "Invalid Date") {
+  if (targetDate.toString() === 'Invalid Date') {
     return inputDate;
   }
   const timeOptions: Intl.DateTimeFormatOptions = {
-    hour: "numeric",
-    minute: "numeric",
+    hour: 'numeric',
+    minute: 'numeric',
     hour12: true,
   };
 
@@ -16,7 +16,7 @@ export function formatDate(inputDate: Date | string): any {
     targetDate.getMonth() === currentDate.getMonth() &&
     targetDate.getFullYear() === currentDate.getFullYear()
   ) {
-    return targetDate.toLocaleTimeString("en-US", timeOptions);
+    return targetDate.toLocaleTimeString('en-US', timeOptions);
   }
 
   // Check if the date was yesterday
@@ -27,28 +27,15 @@ export function formatDate(inputDate: Date | string): any {
     targetDate.getMonth() === yesterday.getMonth() &&
     targetDate.getFullYear() === yesterday.getFullYear()
   ) {
-    return `Yesterday at ${targetDate.toLocaleTimeString(
-      "en-US",
-      timeOptions
-    )}`;
+    return `Yesterday at ${targetDate.toLocaleTimeString('en-US', timeOptions)}`;
   }
 
   // Check if the date is within the current week
-  const daysOfWeek: string[] = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+  const daysOfWeek: string[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   if (currentDate.getTime() - targetDate.getTime() < 7 * 24 * 60 * 60 * 1000) {
-    return `${
-      daysOfWeek[targetDate.getDay()]
-    } at ${targetDate.toLocaleTimeString("en-US", timeOptions)}`;
+    return `${daysOfWeek[targetDate.getDay()]} at ${targetDate.toLocaleTimeString('en-US', timeOptions)}`;
   }
 
   // Date is more than a week ago
-  return `${targetDate.toLocaleDateString("en-US")}`;
+  return `${targetDate.toLocaleDateString('en-US')}`;
 }

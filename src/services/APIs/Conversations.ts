@@ -1,14 +1,10 @@
-import qs from "qs";
-import { API } from "./index";
-import axios from "axios";
+import qs from 'qs';
+import { API } from './index';
+import axios from 'axios';
 
-export const getAllConversations = async () =>
-  axios.get(`${API}/conversations`).then((res) => res.data);
+export const getAllConversations = async () => axios.get(`${API}/conversations`).then((res) => res.data);
 
-export const getConversation = async (params: {
-  page: string;
-  userIds: [string];
-}) =>
+export const getConversation = async (params: { page: string; userIds: [string] }) =>
   axios
     .get(`${API}/conversation?page=${params.page}`, {
       params: {

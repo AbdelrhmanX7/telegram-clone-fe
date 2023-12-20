@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { login, register, userSearch } from "../APIs";
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { login, register, userSearch } from '../APIs';
 
 export const useLogin = () => {
   return useMutation({
@@ -23,6 +23,6 @@ export const useUserSearch = (params: { search: string }) => {
   return useQuery({
     queryFn: async () => await userSearch(params),
     staleTime: 1000,
-    queryKey: ["getUsers"],
+    queryKey: ['getUsers'],
   });
 };

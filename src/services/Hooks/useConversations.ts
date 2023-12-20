@@ -1,19 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllConversations, getConversation } from "../APIs";
+import { useQuery } from '@tanstack/react-query';
+import { getAllConversations, getConversation } from '../APIs';
 
 export const useGetAllConversations = () => {
   return useQuery({
-    queryKey: ["getAllConversations"],
+    queryKey: ['getAllConversations'],
     queryFn: getAllConversations,
   });
 };
 
-export const useGetConversation = (params: {
-  page: string;
-  userIds: [string];
-}) => {
+export const useGetConversation = (params: { page: string; userIds: [string] }) => {
   return useQuery({
-    queryKey: ["getConversation"],
+    queryKey: ['getConversation'],
     queryFn: () => getConversation(params),
     enabled: !!params?.userIds?.length,
   });

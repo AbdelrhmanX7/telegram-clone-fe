@@ -1,13 +1,13 @@
-import { ChatInterface } from "@/components";
-import ChatsLayout from "@/components/ChatsLayout";
-import React from "react";
+import { ChatInterface } from '@/components';
+import ChatsLayout from '@/components/ChatsLayout';
+import React from 'react';
 
 export function Page({ children }: { children: React.ReactNode }) {
-  return <div className="w-full h-full">{children}</div>;
+  return <div className='w-full h-full'>{children}</div>;
 }
 
 export default function Transactions() {
-  return <ChatInterface params={{ userIds: [""], page: "" }} />;
+  return <ChatInterface params={{ userIds: [''], page: '' }} />;
 }
 
 Transactions.getLayout = function getLayout(page: any) {

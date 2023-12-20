@@ -1,2 +1,2 @@
-export * from "./AnimateNumbers";
-export * from "./AnimateChangeInSize";
+export * from './AnimateNumbers';
+export * from './AnimateChangeInSize';

@@ -1,8 +1,8 @@
-import ChatsLayout from "@/components/ChatsLayout";
-import React, { useMemo } from "react";
-import { Page } from ".";
-import { ChatInterface } from "@/components";
-import { GetServerSideProps } from "next";
+import ChatsLayout from '@/components/ChatsLayout';
+import React, { useMemo } from 'react';
+import { Page } from '.';
+import { ChatInterface } from '@/components';
+import { GetServerSideProps } from 'next';
 
 export const getServerSideProps: GetServerSideProps = async (req) => {
   return {
@@ -16,13 +16,13 @@ export default function ChatId({ id }: any) {
   const params = useMemo(
     () => ({
       userIds: id,
-      page: "1",
+      page: '1',
     }),
-    [id]
+    [id],
   );
 
   return (
-    <div className="w-full h-full">
+    <div className='w-full h-full'>
       <ChatInterface params={params} />
     </div>
   );
