@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useLocalStorage } from 'usehooks-ts';
 import { useRouter } from 'next/router';
-import { Button, EmailInput, PasswordInput } from '@/UI';
+import { Button, EmailInput, PasswordInput } from '@/ui';
 import { useLogin } from '@/services/Hooks';
 import { setCookie } from 'cookies-next';
 import toast from 'react-hot-toast';

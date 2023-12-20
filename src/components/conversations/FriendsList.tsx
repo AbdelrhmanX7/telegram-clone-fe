@@ -1,4 +1,4 @@
-import { ChatCard, Input } from '@/UI';
+import { ChatCard, Input } from '@/ui';
 import { useGetAllConversations, useUserSearch } from '@/services/Hooks';
 import React, { useEffect, useMemo } from 'react';
 import { useSearch } from '@/hooks';

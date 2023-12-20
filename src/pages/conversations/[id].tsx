@@ -1,6 +1,6 @@
-import ChatsLayout from '@/components/ChatsLayout';
 import React, { useMemo } from 'react';
 import { Page } from '.';
+import { ChatsLayout } from '@/components/layouts';
 import { ChatInterface } from '@/components';
 import { GetServerSideProps } from 'next';
 

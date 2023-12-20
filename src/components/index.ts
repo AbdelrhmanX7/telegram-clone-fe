@@ -1,2 +1,2 @@
-export * from './ChatInterface';
-export * from './FriendsList';
+export * from './conversations';
+export * from './layouts';

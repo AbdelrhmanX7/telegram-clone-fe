@@ -1,4 +1,4 @@
-import { ChatCardProps } from '@/UI/ChatCard/type';
+import { ChatCardProps } from '@/ui/chatCard/type';
 
 export const CHATS: ChatCardProps[] = [
   {

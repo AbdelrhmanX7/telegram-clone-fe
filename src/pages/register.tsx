@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { setCookie } from 'cookies-next';
 import { useLocalStorage } from 'usehooks-ts';
 import { useRouter } from 'next/router';
-import { Button, EmailInput, Image, Input, PasswordInput } from '@/UI';
+import { Button, EmailInput, Image, Input, PasswordInput } from '@/ui';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 import { classNames } from '@/utils';

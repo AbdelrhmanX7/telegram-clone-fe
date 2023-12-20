@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Dropdown } from 'antd';
 import { classNames } from '@/utils';
-import Button from '../Button';
+import Button from '../button';
 import { useOnClickOutside } from 'usehooks-ts';
 import { MenuPropsType } from './type';
 

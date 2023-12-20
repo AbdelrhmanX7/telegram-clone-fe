@@ -22,8 +22,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/UI/SelectableCard/SelectableCard.stories.sx",
-    "src/UI/SelectableCards/SelectableCards.stories.jsx"
   ],
   "exclude": ["node_modules"]
 }

@@ -1,7 +1,7 @@
 import '@/styles/globals.css';
 import axios from 'axios';
 import { getCookie } from 'cookies-next';
-import Layout from '@/components/Layout';
+import { Layout } from '@/components/layouts';
 
 export default function App({ Component, pageProps }: any) {
   const getLayout = Component.getLayout || ((page: any) => <Layout>{page}</Layout>);

@@ -1,11 +1,11 @@
 import React from 'react';
-import Image from '../ImageWithFallback';
+import Image from '../imageWithFallback';
 import { FaVolumeMute } from 'react-icons/fa';
 import { TiPin } from 'react-icons/ti';
 import { classNames, formatDate } from '../../utils';
 import { motion } from 'framer-motion';
 import { ChatCardProps } from './type';
-import { AnimateNumbers } from '../Animations';
+import { AnimateNumbers } from '../animations';
 import MessageState from './MessageState';
 import ChatCardSkeletonLoader from './ChatCardSkeletonLoader';
 

@@ -1,4 +1,4 @@
-import { Button, Input } from '@/UI';
+import { Button, Input } from '@/ui';
 import { useWebSocket } from '@/hooks';
 import { useGetConversation } from '@/services/Hooks';
 import { GetInvalidateQueries } from '@/services/InvalidateQueries';

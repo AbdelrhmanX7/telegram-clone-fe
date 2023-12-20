@@ -1,7 +1,7 @@
 import React from 'react';
-import FriendsList from './FriendsList';
+import { FriendsList } from '../conversations';
 
-const ChatsLayout = ({ children }: any) => {
+export const ChatsLayout = ({ children }: any) => {
   return (
     <div className='w-screen h-screen flex justify-center items-center'>
       <FriendsList />
