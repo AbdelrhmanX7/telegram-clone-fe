@@ -2,7 +2,7 @@ import { Button, Input } from '@/ui';
 import { useWebSocket } from '@/hooks';
 import { useGetConversation } from '@/services/Hooks';
 import { GetInvalidateQueries } from '@/services/InvalidateQueries';
-import { classNames } from '@/utils';
+import { classNames, formatDate } from '@/utils';
 import { setCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -11,52 +11,71 @@ import { useLocalStorage } from 'usehooks-ts';
 import { IoIosArrowBack } from 'react-icons/io';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+
 export const ChatInterface = ({
-  lastActiveDate = 'last seen recently',
   params,
 }: {
-  lastActiveDate?: string;
   params: {
     userIds: [string];
     page: string;
   };
 }) => {
-  const { data, refetch } = useGetConversation(params);
+  const { data, refetch, isSuccess } = useGetConversation(params);
+  const [conversationMessages, setConversationMessages] = useState<any>([]);
   useEffect(() => {
     refetch();
   }, [params]);
+  useEffect(() => {
+    if (isSuccess && data?.messages?.length) {
+      setConversationMessages(data.messages);
+    }
+  }, [data, isSuccess]);
   const { invalidateGetAllConversations } = GetInvalidateQueries();
   const [userData, setUserData] = useLocalStorage<any>('user', {});
   const [user, setUser] = useState<any>({});
   useEffect(() => setUser(userData), [userData]);
   const router = useRouter();
   const [currentMessage, setCurrentMessage] = useState('');
-  const { socket, isReady } = useWebSocket(user?._id);
+  const { socket, isReady } = useWebSocket();
+  const [userTyping, setUserTyping] = useState({
+    senderId: '',
+    isTyping: false,
+  });
 
   useEffect(() => {
     if (isReady && !!socket?.on) {
-      socket.on('message', async () => {
-        refetch();
-        invalidateGetAllConversations();
+      socket.on('message', async (message) => {
+        if (message?.isFirstMsg) {
+          refetch();
+          invalidateGetAllConversations();
+        }
+        delete message.isFirstMsg;
+        setConversationMessages([...conversationMessages, message]);
+      });
+      socket.on('typing', async (typingState: any) => {
+        setUserTyping(typingState);
       });
     }
-  }, [isReady, socket]);
+  }, [isReady, socket, conversationMessages]);
 
   const sendMessage = () => {
-    socket.emit(
-      'message',
-      JSON.stringify({
-        message: currentMessage,
-        senderId: user?._id,
-        receiverId: data?.user?._id,
-        conversationId: data?.conversationId,
-      }),
-    );
+    socket.emit('message', {
+      message: currentMessage,
+      senderId: user?._id,
+      receiverId: data?.user?._id,
+      conversationId: data?.conversationId,
+    });
     setCurrentMessage('');
   };
 
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    setWidth(window.innerWidth);
+  }, []);
+
   const isChatInActive = !data?.user?.username?.length || !user?.username?.length;
-  const isMobile = window.innerWidth < 768;
+  const isMobile = width < 768;
+
   return (
     <motion.div
       className={classNames(
@@ -85,7 +104,13 @@ export const ChatInterface = ({
               </Link>
               <div className='flex flex-col'>
                 <p className='font-semibold text-[#222222]'>{data?.user?.username}</p>
-                <p className='text-xs text-[#8D8E90]'>{lastActiveDate}</p>
+                {userTyping?.isTyping ? (
+                  <p className='text-xs text-green-600 '>Typing...</p>
+                ) : data?.user?.isActive ? (
+                  <p className='text-xs text-green-600 '>Online</p>
+                ) : (
+                  <p className='text-xs text-[#8D8E90]'>Last seen at {formatDate(data?.user?.lastSeenAt)}</p>
+                )}
               </div>
             </div>
             <div>
@@ -102,8 +127,8 @@ export const ChatInterface = ({
             </div>
           </div>
           <div className='h-full w-full overflow-auto py-2.5 px-2'>
-            {!!data?.messages.length &&
-              data?.messages?.map((item: any, index: any) => (
+            {!!conversationMessages.length &&
+              conversationMessages?.map((item: any, index: any) => (
                 <div
                   className={classNames(
                     'bg-white my-2 p-4 w-fit font-medium shadow-md border text-lg max-w-[350px] rounded-lg',
@@ -121,6 +146,22 @@ export const ChatInterface = ({
               className='h-[35px] !text-base rounded-none !border-none !shadow-none font-normal'
               onChange={({ target }) => setCurrentMessage(target.value)}
               value={currentMessage}
+              onFocus={() => {
+                socket.emit('typing', {
+                  isTyping: true,
+                  senderId: user?._id,
+                  receiverId: data?.user?._id,
+                  conversationId: data?.conversationId,
+                });
+              }}
+              onBlur={() => {
+                socket.emit('typing', {
+                  isTyping: false,
+                  senderId: user?._id,
+                  receiverId: data?.user?._id,
+                  conversationId: data?.conversationId,
+                });
+              }}
             />
             <div className='hover:bg-[#f1f1f1] duration-300 cursor-pointer' onClick={sendMessage}>
               <RiSendPlaneFill className='w-7 h-7 rotate-45' color='0F80D7' />

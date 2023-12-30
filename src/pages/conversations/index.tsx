@@ -1,9 +1,8 @@
 import ChatsLayout from '@/components/layouts/ChatsLayout';
-import { AnimatePresence } from 'framer-motion';
 import React from 'react';
 
 export function Page({ children }: { children: React.ReactNode }) {
-  return <AnimatePresence mode='wait'>{children}</AnimatePresence>;
+  return <>{children}</>;
 }
 
 export default function Transactions() {

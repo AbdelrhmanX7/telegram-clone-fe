@@ -48,6 +48,7 @@ export const FriendsList = () => {
                 username={item?.username}
                 profileImage={item?.profileImage?.url}
                 blurHashProfileImage={item?.profileImage?.blurHash}
+                isActive={item?.isActive}
               />
             </Link>
           ))}

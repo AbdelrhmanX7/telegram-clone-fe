@@ -23,6 +23,6 @@ export default {
 };
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template = (args: ChatCardProps) => <ChatCard className='!max-w-[320px]' {...args} />;
+const Template = (args: ChatCardProps) => <ChatCard className='!max-w-[360px]' {...args} />;
 
 export const ChatCardElement: any = Template.bind({});
