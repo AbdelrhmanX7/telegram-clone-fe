@@ -15,7 +15,7 @@ export const getServerSideProps: GetServerSideProps = async (req) => {
 export default function ChatId({ id }: any) {
   const params = useMemo(
     () => ({
-      userIds: id,
+      userId: id,
       page: '1',
     }),
     [id],

@@ -1,10 +1,11 @@
 import React from 'react';
 import { FriendsList } from '../conversations';
-import { GetInvalidateQueries } from '@/services/InvalidateQueries';
+import { useGetInvalidateQueries } from '@/services/InvalidateQueries';
 import { useEffect } from 'react';
 import { useWebSocket } from '@/hooks';
+
 export const ChatsLayout = ({ children }: any) => {
-  const { invalidateGetAllConversations, invalidateGetConversation } = GetInvalidateQueries();
+  const { invalidateGetAllConversations, invalidateGetConversation } = useGetInvalidateQueries();
   const { socket, isReady } = useWebSocket();
   useEffect(() => {
     if (isReady && !!socket.on) {
@@ -16,7 +17,17 @@ export const ChatsLayout = ({ children }: any) => {
         invalidateGetAllConversations();
         invalidateGetConversation();
       });
+      socket.on('seen:message', () => {
+        invalidateGetAllConversations();
+        invalidateGetConversation();
+      });
     }
+    return () => {
+      if (socket?.off) {
+        socket.off('user_connect');
+        socket.off('user_disconnect');
+      }
+    };
   }, [socket, isReady]);
   return (
     <div className='w-screen h-screen flex justify-center items-center'>

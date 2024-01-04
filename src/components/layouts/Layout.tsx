@@ -19,10 +19,17 @@ export const Layout = ({ children }: any) => {
   useEffect(() => {
     if (!!socket?.on && user?._id) {
       socket.on('receive:message', (data: any, callback) => {
+        console.log('check');
         socket.emit('message:received', data, query?.id === data?.senderId);
-        callback('', 'check if it works??!!');
+        callback({ status: 'ok' });
       });
     }
+
+    return () => {
+      if (socket?.off && user?._id) {
+        socket.off('receive:message');
+      }
+    };
   }, [socket, user, query]);
 
   return (

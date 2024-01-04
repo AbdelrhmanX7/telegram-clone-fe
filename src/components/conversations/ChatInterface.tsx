@@ -1,7 +1,7 @@
 import { Button, Input } from '@/ui';
 import { useWebSocket } from '@/hooks';
 import { useGetConversation } from '@/services/Hooks';
-import { GetInvalidateQueries } from '@/services/InvalidateQueries';
+import { useGetInvalidateQueries } from '@/services/InvalidateQueries';
 import { classNames, formatDate } from '@/utils';
 import { setCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
@@ -16,7 +16,7 @@ export const ChatInterface = ({
   params,
 }: {
   params: {
-    userIds: [string];
+    userId: string;
     page: string;
   };
 }) => {
@@ -30,7 +30,7 @@ export const ChatInterface = ({
       setConversationMessages(data.messages);
     }
   }, [data, isSuccess]);
-  const { invalidateGetAllConversations } = GetInvalidateQueries();
+  const { invalidateGetAllConversations } = useGetInvalidateQueries();
   const [userData, setUserData] = useLocalStorage<any>('user', {});
   const [user, setUser] = useState<any>({});
   useEffect(() => setUser(userData), [userData]);
@@ -41,40 +41,58 @@ export const ChatInterface = ({
     senderId: '',
     isTyping: false,
   });
+  useEffect(() => {
+    if (isReady && !!socket.on && !!data?.conversationId) {
+      socket.emit('message:seen', {
+        senderId: user?._id,
+        receiverId: params.userId,
+        conversationId: data?.conversationId,
+      });
+    }
+    return () => {
+      if (socket?.off) socket.off('message:seen');
+    };
+  }, [data]);
 
   useEffect(() => {
     if (isReady && !!socket?.on) {
-      socket.on('message', async (message) => {
+      socket.on('direct:message', async (message) => {
         if (message?.isFirstMsg) {
           refetch();
           invalidateGetAllConversations();
         }
+        window.scrollTo(0, document.body.scrollHeight);
         delete message.isFirstMsg;
         setConversationMessages([...conversationMessages, message]);
-      });
-      socket.on('typing', async (typingState: any) => {
-        setUserTyping(typingState);
       });
     }
   }, [isReady, socket, conversationMessages]);
 
-  const sendMessage = () => {
+  useEffect(() => {
+    if (!!socket?.on && params?.userId) {
+      socket.on('typing', async (typingState: any) => {
+        if (typingState?.senderId === params.userId) setUserTyping(typingState);
+      });
+    }
+  }, [socket, params]);
+
+  function sendMessage() {
     socket.emit('message', {
       message: currentMessage,
       senderId: user?._id,
-      receiverId: data?.user?._id,
+      receiverId: data.user._id,
       conversationId: data?.conversationId,
     });
     setCurrentMessage('');
-  };
+  }
 
   const [width, setWidth] = useState(0);
   useEffect(() => {
-    setWidth(window.innerWidth);
+    window.addEventListener('resize', () => setWidth(window.innerWidth));
+    return () => window.removeEventListener('resize', () => setWidth(window.innerWidth));
   }, []);
 
   const isChatInActive = !data?.user?.username?.length || !user?.username?.length;
-  const isMobile = width < 768;
 
   return (
     <motion.div
@@ -82,9 +100,9 @@ export const ChatInterface = ({
         'w-full h-full flex flex-col justify-start items-center bg-[#7d8991] md:relative fixed md:opacity-100 top-0 left-0 right-0',
         isChatInActive ? 'opacity-0' : 'opacity-100',
       )}
-      initial={isMobile ? { x: 800, opacity: 0 } : {}}
-      animate={isMobile ? { x: 0, opacity: 1 } : {}}
-      exit={isMobile ? { x: 800, opacity: 0 } : {}}
+      initial={width < 768 ? { x: 800, opacity: 0 } : {}}
+      animate={width < 768 ? { x: 0, opacity: 1 } : {}}
+      exit={width < 768 ? { x: 800, opacity: 0 } : {}}
       transition={{
         type: 'spring',
         bounce: 0,
@@ -133,6 +151,11 @@ export const ChatInterface = ({
                   className={classNames(
                     'bg-white my-2 p-4 w-fit font-medium shadow-md border text-lg max-w-[350px] rounded-lg',
                     item?.senderId === user?._id ? 'bg-[#effedd] ml-auto' : 'bg-white',
+                    item.messageState === 'sent'
+                      ? 'bg-red-300'
+                      : item.messageState === 'received'
+                      ? 'bg-yellow-300'
+                      : 'bg-[#effedd]',
                   )}
                   key={`${item.message}-${index}`}
                 >
@@ -150,7 +173,7 @@ export const ChatInterface = ({
                 socket.emit('typing', {
                   isTyping: true,
                   senderId: user?._id,
-                  receiverId: data?.user?._id,
+                  receiverId: params.userId,
                   conversationId: data?.conversationId,
                 });
               }}
@@ -158,7 +181,7 @@ export const ChatInterface = ({
                 socket.emit('typing', {
                   isTyping: false,
                   senderId: user?._id,
-                  receiverId: data?.user?._id,
+                  receiverId: params.userId,
                   conversationId: data?.conversationId,
                 });
               }}

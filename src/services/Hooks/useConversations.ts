@@ -8,10 +8,10 @@ export const useGetAllConversations = () => {
   });
 };
 
-export const useGetConversation = (params: { page: string; userIds: [string] }) => {
+export const useGetConversation = (params: { page: string; userId: string }) => {
   return useQuery({
     queryKey: ['getConversation'],
     queryFn: () => getConversation(params),
-    enabled: !!params?.userIds?.length,
+    enabled: !!params?.userId?.length,
   });
 };
