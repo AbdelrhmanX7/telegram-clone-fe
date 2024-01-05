@@ -5,7 +5,7 @@ import { TiPin } from 'react-icons/ti';
 import { classNames, formatDate } from '../../utils';
 import { motion } from 'framer-motion';
 import { ChatCardProps } from './type';
-import { AnimateNumbers } from '../animations';
+import { AnimateNumbers } from '../animateNumbers';
 import MessageState from './MessageState';
 import ChatCardSkeletonLoader from './ChatCardSkeletonLoader';
 
