@@ -23,6 +23,7 @@ export const ChatCard = ({
   className,
   isLoading = false,
   onClick,
+  isTyping,
 }: ChatCardProps) => {
   if (isLoading) return <ChatCardSkeletonLoader />;
   return (
@@ -58,8 +59,13 @@ export const ChatCard = ({
           </div>
         </div>
         <div className='flex justify-between gap-1'>
-          <div className='text-[#8D8E90] whitespace-nowrap gap-1.5 overflow-hidden text-ellipsis text-sm w-fit'>
-            {lastMessage?.length ? lastMessage : `${username} joined Telegram`}
+          <div
+            className={classNames(
+              'text-[#8D8E90] whitespace-nowrap gap-1.5 overflow-hidden text-ellipsis text-sm w-fit',
+              isTyping && 'text-green-600',
+            )}
+          >
+            {isTyping ? 'Typing...' : lastMessage?.length ? lastMessage : `${username} joined Telegram`}
           </div>
           <motion.div
             initial={{ x: 20 }}

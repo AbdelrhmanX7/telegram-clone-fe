@@ -1,5 +1,5 @@
 export type MessageStateProps = {
-  messageState?: 'empty' | 'sending' | 'sent' | 'arrived' | 'seen';
+  messageState?: 'empty' | 'sending' | 'sent' | 'received' | 'seen';
 };
 
 export type ChatCardProps = {
@@ -16,4 +16,5 @@ export type ChatCardProps = {
   className?: string;
   isLoading?: boolean;
   onClick?: () => void;
+  isTyping?: boolean;
 };

@@ -1,9 +1,10 @@
 import { ChatCard, Input } from '@/ui';
-import { useGetAllConversations, useUserSearch } from '@/services/Hooks';
-import React, { useEffect, useMemo } from 'react';
+import { useUserSearch } from '@/services/Hooks';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { useSearch } from '@/hooks';
 import Link from 'next/link';
 import SearchResults from './SearchResults';
+import { ConversationsContext } from '@/context';
 
 export const FriendsList = () => {
   const { searchTerm, debouncedSearchTerm, isSearching, setIsSearching, setSearchTerm } = useSearch();
@@ -12,7 +13,7 @@ export const FriendsList = () => {
 
   const { data: searchData, isFetching, refetch } = useUserSearch(userSearchParams);
 
-  const { data: dataConversations } = useGetAllConversations();
+  const { conversations } = useContext(ConversationsContext);
 
   useEffect(() => {
     refetch();
@@ -41,14 +42,18 @@ export const FriendsList = () => {
           </>
         )}
 
-        {!!dataConversations?.length &&
-          dataConversations?.map((item: any) => (
-            <Link key={`${item.username} ${item._id}`} href={`/conversations/${item._id}`}>
+        {!!conversations?.length &&
+          conversations?.map((user: any) => (
+            <Link key={`${user.username} ${user._id}`} href={`/conversations/${user._id}`}>
               <ChatCard
-                username={item?.username}
-                profileImage={item?.profileImage?.url}
-                blurHashProfileImage={item?.profileImage?.blurHash}
-                isActive={item?.isActive}
+                username={user?.username}
+                profileImage={user?.profileImage?.url}
+                blurHashProfileImage={user?.profileImage?.blurHash}
+                isActive={user?.isActive}
+                lastMessage={user.message}
+                lastMessageDate={user.timestamp}
+                messageState={user.messageState}
+                isTyping={user?.isTyping}
               />
             </Link>
           ))}

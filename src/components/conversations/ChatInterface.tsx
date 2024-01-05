@@ -1,16 +1,17 @@
 import { Button, Input } from '@/ui';
-import { useWebSocket } from '@/hooks';
 import { useGetConversation } from '@/services/Hooks';
 import { useGetInvalidateQueries } from '@/services/InvalidateQueries';
 import { classNames, formatDate } from '@/utils';
 import { setCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { RiSendPlaneFill } from 'react-icons/ri';
 import { useLocalStorage } from 'usehooks-ts';
 import { IoIosArrowBack } from 'react-icons/io';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { ConversationsContext } from '@/context';
+import { socket } from '../layouts';
 
 export const ChatInterface = ({
   params,
@@ -31,68 +32,57 @@ export const ChatInterface = ({
     }
   }, [data, isSuccess]);
   const { invalidateGetAllConversations } = useGetInvalidateQueries();
-  const [userData, setUserData] = useLocalStorage<any>('user', {});
-  const [user, setUser] = useState<any>({});
-  useEffect(() => setUser(userData), [userData]);
+  const [userInfo, setUserInfo] = useLocalStorage<any>('user', {});
+  const { conversations, setConversations } = useContext(ConversationsContext);
   const router = useRouter();
   const [currentMessage, setCurrentMessage] = useState('');
-  const { socket, isReady } = useWebSocket();
-  const [userTyping, setUserTyping] = useState({
+  const [userState, setUserState] = useState({
     senderId: '',
     isTyping: false,
+    isActive: false,
+    lastSeenAt: '',
   });
-  useEffect(() => {
-    if (isReady && !!socket.on && !!data?.conversationId) {
-      socket.emit('message:seen', {
-        senderId: user?._id,
-        receiverId: params.userId,
-        conversationId: data?.conversationId,
-      });
-    }
-    return () => {
-      if (socket?.off) socket.off('message:seen');
-    };
-  }, [data]);
 
   useEffect(() => {
-    if (isReady && !!socket?.on) {
-      socket.on('direct:message', async (message) => {
-        if (message?.isFirstMsg) {
-          refetch();
-          invalidateGetAllConversations();
+    const getConversation = conversations.find((user: any) => user._id === params?.userId);
+    setUserState({ ...getConversation });
+  }, [conversations, params]);
+
+  useEffect(() => {
+    socket.on('direct:message', async (message) => {
+      if (message?.isFirstMsg) {
+        refetch();
+      }
+      window.scrollTo(0, document.body.scrollHeight);
+      delete message.isFirstMsg;
+      invalidateGetAllConversations();
+      conversations.map((user: any) => {
+        if (user.conversationId === message.conversationId) {
+          user.message = message.message;
+          user.messageState = message.messageState;
+          user.timestamp = message.timestamp;
         }
-        window.scrollTo(0, document.body.scrollHeight);
-        delete message.isFirstMsg;
-        setConversationMessages([...conversationMessages, message]);
+        return user;
       });
-    }
-  }, [isReady, socket, conversationMessages]);
-
-  useEffect(() => {
-    if (!!socket?.on && params?.userId) {
-      socket.on('typing', async (typingState: any) => {
-        if (typingState?.senderId === params.userId) setUserTyping(typingState);
-      });
-    }
-  }, [socket, params]);
+      setConversations([...conversations]);
+      setConversationMessages([...conversationMessages, message]);
+    });
+    return () => {
+      socket.off('direct:message');
+    };
+  }, [conversationMessages]);
 
   function sendMessage() {
     socket.emit('message', {
       message: currentMessage,
-      senderId: user?._id,
+      senderId: userInfo?._id,
       receiverId: data.user._id,
       conversationId: data?.conversationId,
     });
     setCurrentMessage('');
   }
 
-  const [width, setWidth] = useState(0);
-  useEffect(() => {
-    window.addEventListener('resize', () => setWidth(window.innerWidth));
-    return () => window.removeEventListener('resize', () => setWidth(window.innerWidth));
-  }, []);
-
-  const isChatInActive = !data?.user?.username?.length || !user?.username?.length;
+  const isChatInActive = !data?.user?.username?.length || !userInfo?.username?.length;
 
   return (
     <motion.div
@@ -100,9 +90,6 @@ export const ChatInterface = ({
         'w-full h-full flex flex-col justify-start items-center bg-[#7d8991] md:relative fixed md:opacity-100 top-0 left-0 right-0',
         isChatInActive ? 'opacity-0' : 'opacity-100',
       )}
-      initial={width < 768 ? { x: 800, opacity: 0 } : {}}
-      animate={width < 768 ? { x: 0, opacity: 1 } : {}}
-      exit={width < 768 ? { x: 800, opacity: 0 } : {}}
       transition={{
         type: 'spring',
         bounce: 0,
@@ -122,19 +109,21 @@ export const ChatInterface = ({
               </Link>
               <div className='flex flex-col'>
                 <p className='font-semibold text-[#222222]'>{data?.user?.username}</p>
-                {userTyping?.isTyping ? (
+                {userState.isTyping ? (
                   <p className='text-xs text-green-600 '>Typing...</p>
-                ) : data?.user?.isActive ? (
+                ) : userState.isActive ? (
                   <p className='text-xs text-green-600 '>Online</p>
                 ) : (
-                  <p className='text-xs text-[#8D8E90]'>Last seen at {formatDate(data?.user?.lastSeenAt)}</p>
+                  <p className='text-xs text-[#8D8E90]'>
+                    {userState?.lastSeenAt ? `Last seen at ${formatDate(userState.lastSeenAt)}` : 'last seen recenlty'}
+                  </p>
                 )}
               </div>
             </div>
             <div>
               <Button
                 onClick={() => {
-                  setUserData({});
+                  setUserInfo({});
                   setCookie('token', '');
                   router.push('/login');
                 }}
@@ -150,12 +139,8 @@ export const ChatInterface = ({
                 <div
                   className={classNames(
                     'bg-white my-2 p-4 w-fit font-medium shadow-md border text-lg max-w-[350px] rounded-lg',
-                    item?.senderId === user?._id ? 'bg-[#effedd] ml-auto' : 'bg-white',
-                    item.messageState === 'sent'
-                      ? 'bg-red-300'
-                      : item.messageState === 'received'
-                      ? 'bg-yellow-300'
-                      : 'bg-[#effedd]',
+                    item?.senderId === userInfo?._id ? 'bg-[#effedd] ml-auto' : 'bg-white',
+                    item.messageState === 'sent' ? 'bg-red-300' : item.messageState === 'received' && 'bg-yellow-300',
                   )}
                   key={`${item.message}-${index}`}
                 >
@@ -172,7 +157,7 @@ export const ChatInterface = ({
               onFocus={() => {
                 socket.emit('typing', {
                   isTyping: true,
-                  senderId: user?._id,
+                  senderId: userInfo?._id,
                   receiverId: params.userId,
                   conversationId: data?.conversationId,
                 });
@@ -180,7 +165,7 @@ export const ChatInterface = ({
               onBlur={() => {
                 socket.emit('typing', {
                   isTyping: false,
-                  senderId: user?._id,
+                  senderId: userInfo?._id,
                   receiverId: params.userId,
                   conversationId: data?.conversationId,
                 });

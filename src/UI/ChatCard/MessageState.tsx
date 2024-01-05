@@ -25,7 +25,7 @@ export const MessageState = ({ messageState }: MessageStateProps) => {
         yValue = -16;
         setAnimationState(2);
         break;
-      case 'arrived':
+      case 'received':
       case 'seen':
         yValue = -32;
         setAnimationState(3);
